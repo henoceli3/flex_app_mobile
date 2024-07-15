@@ -1,11 +1,23 @@
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Contacts from "expo-contacts";
-import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { AppColors } from "@/constants/Colors";
 
-const SelectContact = () => {
+interface Props {
+  stepsTransation: number;
+  setStepsTransation: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const SelectContact = ({ stepsTransation, setStepsTransation }: Props) => {
   const [listeContactes, setListeContactes] = useState<Contacts.Contact[]>([]);
   const [permissionGranted, setPermissionGranted] = useState(false);
   const [filteredContacts, setFilteredContacts] = useState<Contacts.Contact[]>(
@@ -29,8 +41,13 @@ const SelectContact = () => {
   }, []);
 
   useEffect(() => {
-    const filtered = listeContactes.filter((contact) =>
-      contact.name.toLowerCase().includes(searchText.toLowerCase())
+    const filtered = listeContactes.filter(
+      (contact) =>
+        contact.name.toLowerCase().includes(searchText.trim().toLowerCase()) ||
+        (contact.phoneNumbers &&
+          contact.phoneNumbers[0].number
+            ?.replace(" ", "")
+            .includes(searchText.trim()))
     );
     setFilteredContacts(filtered);
   }, [searchText, listeContactes]);
@@ -74,7 +91,13 @@ const SelectContact = () => {
           <FlatList
             data={filteredContacts}
             renderItem={({ item }) => (
-              <View style={styles.contactItem}>
+              <TouchableOpacity
+                style={styles.contactItem}
+                key={item.id}
+                onPress={() => {
+                  setStepsTransation(1);
+                }}
+              >
                 <View>
                   <AntDesign name="user" size={24} color="black" />
                 </View>
@@ -86,7 +109,7 @@ const SelectContact = () => {
                     </Text>
                   )}
                 </View>
-              </View>
+              </TouchableOpacity>
             )}
           />
         </>

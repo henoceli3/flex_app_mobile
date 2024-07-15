@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import SelectContact from "./SelectContact";
 import { Text, View } from "react-native";
+import SendPage from "./SendPage";
 
 const Transfert = () => {
   const [stepsTransation, setStepsTransation] = useState(0);
@@ -15,9 +16,14 @@ const Transfert = () => {
   function renderSteps() {
     switch (stepsTransation) {
       case 0:
-        return <SelectContact />;
+        return (
+          <SelectContact
+            stepsTransation={stepsTransation}
+            setStepsTransation={setStepsTransation}
+          />
+        );
       case 1:
-        return <View></View>;
+        return <SendPage />;
       case 2:
         return <View></View>;
       default:

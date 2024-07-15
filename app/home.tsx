@@ -67,16 +67,16 @@ const HomePage = () => {
 
   const headerButton = [
     {
-      label: "Depot",
-      icon: null,
-      onPress: () => {},
-    },
-    {
       label: "Transfert",
       icon: null,
       onPress: () => {
-        router.push("/Transfert");
+        router.push("/transfert");
       },
+    },
+    {
+      label: "Depot",
+      icon: null,
+      onPress: () => {},
     },
   ];
   return (
@@ -102,7 +102,6 @@ const HomePage = () => {
               alignItems: "center",
               justifyContent: "space-between",
               width: "100%",
-
             }}
           >
             <AntDesign name="setting" size={24} color="white" />
