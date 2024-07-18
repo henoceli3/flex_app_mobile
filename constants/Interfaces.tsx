@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface UsersInterface {
   id: number;
   uuid?: string;
@@ -34,4 +36,9 @@ export interface TransactionInterface {
   deleted_at: string | null;
   beneficiaire: UsersInterface;
   expediteur: UsersInterface;
+}
+
+export interface AuthButton {
+  title: React.ReactNode;
+  onPress: () => void;
 }

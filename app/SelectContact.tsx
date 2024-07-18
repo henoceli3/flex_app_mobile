@@ -13,17 +13,26 @@ import { AntDesign } from "@expo/vector-icons";
 import { AppColors } from "@/constants/Colors";
 
 interface Props {
-  stepsTransation: number;
   setStepsTransation: React.Dispatch<React.SetStateAction<number>>;
+  setContact: React.Dispatch<React.SetStateAction<Contacts.Contact>>;
 }
 
-const SelectContact = ({ stepsTransation, setStepsTransation }: Props) => {
+const SelectContact = ({ setStepsTransation, setContact }: Props) => {
   const [listeContactes, setListeContactes] = useState<Contacts.Contact[]>([]);
   const [permissionGranted, setPermissionGranted] = useState(false);
   const [filteredContacts, setFilteredContacts] = useState<Contacts.Contact[]>(
     []
   );
-  const [searchText, setSearchText] = useState("");
+
+  function formatPhoneNumber(phoneNumber: string | undefined) {
+    // Expression régulière pour capturer l'indicatif du pays (par exemple, +33)
+    const countryCodePattern = /^\+\d{1,3}/;
+    // Supprime l'indicatif du pays
+    phoneNumber = phoneNumber?.replace(countryCodePattern, "");
+    // Remplace les espaces par des tirets
+    phoneNumber = phoneNumber?.replace(/\s+/g, "");
+    return phoneNumber?.trim();
+  }
 
   async function getContactes() {
     const { status } = await Contacts.requestPermissionsAsync();
@@ -32,41 +41,45 @@ const SelectContact = ({ stepsTransation, setStepsTransation }: Props) => {
       const { data } = await Contacts.getContactsAsync({
         fields: [Contacts.Fields.PhoneNumbers],
       });
-      setListeContactes(data);
-      setFilteredContacts(data);
+      //pacourire tout les numeros pour enlever les espaces et les indicatifs pays
+      const newData = data.map((contact) => {
+        return {
+          ...contact,
+          phoneNumbers: contact.phoneNumbers?.map((phoneNumber) => {
+            return {
+              ...phoneNumber,
+              number: formatPhoneNumber(phoneNumber.number),
+            };
+          }),
+        };
+      });
+      setListeContactes(newData);
+      setFilteredContacts(newData);
     }
   }
   useEffect(() => {
     getContactes();
   }, []);
 
-  useEffect(() => {
+  function filterContact(searchText: string) {
     const filtered = listeContactes.filter(
       (contact) =>
         contact.name.toLowerCase().includes(searchText.trim().toLowerCase()) ||
         (contact.phoneNumbers &&
           contact.phoneNumbers[0].number
-            ?.replace(" ", "")
+            ?.replace(/\s+/g, "")
             .includes(searchText.trim()))
     );
     setFilteredContacts(filtered);
-  }, [searchText, listeContactes]);
-
-  const removeCountryCode = (phoneNumber: string | undefined) => {
-    if (phoneNumber && phoneNumber.startsWith("+")) {
-      return phoneNumber.replace(/^\+\d{3}/, "");
-    }
-    return phoneNumber;
-  };
+  }
 
   return (
     <SafeAreaView style={{ padding: 16 }}>
       <TextInput
         style={styles.input}
         onChangeText={(text) => {
-          setSearchText(text);
+          filterContact(text);
         }}
-        value={searchText}
         placeholder="Rechercher un contact"
         autoFocus
       />
@@ -96,6 +109,7 @@ const SelectContact = ({ stepsTransation, setStepsTransation }: Props) => {
                 key={item.id}
                 onPress={() => {
                   setStepsTransation(1);
+                  setContact(item);
                 }}
               >
                 <View>
@@ -105,7 +119,7 @@ const SelectContact = ({ stepsTransation, setStepsTransation }: Props) => {
                   <Text style={styles.contactName}>{item.name}</Text>
                   {item.phoneNumbers && (
                     <Text style={styles.contactPhone}>
-                      {removeCountryCode(item.phoneNumbers[0].number)}
+                      {item.phoneNumbers[0].number}
                     </Text>
                   )}
                 </View>

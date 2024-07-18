@@ -76,7 +76,9 @@ const HomePage = () => {
     {
       label: "Depot",
       icon: null,
-      onPress: () => {},
+      onPress: () => {
+        router.push("/authentification");
+      },
     },
   ];
   return (
