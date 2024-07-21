@@ -10,6 +10,15 @@ export async function getUser(): Promise<UsersInterface | null> {
   return null;
 }
 
+export async function getCode(): Promise<string | null> {
+  const code = await SecureStore.getItemAsync("code");
+  if (code) {
+    const parsedCode = JSON.parse(code);
+    return parsedCode;
+  }
+  return null;
+}
+
 export async function getToken(): Promise<String | null> {
   const token = await SecureStore.getItemAsync("token");
   if (token) {

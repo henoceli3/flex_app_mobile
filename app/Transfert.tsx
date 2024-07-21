@@ -1,6 +1,6 @@
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import SelectContact from "./SelectContact";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import SendPage from "./SendPage";
 import * as Contacts from "expo-contacts";
 
@@ -9,6 +9,9 @@ const Transfert = () => {
   const [contact, setContact] = useState<Contacts.Contact>(
     {} as Contacts.Contact
   );
+  function nexStep() {
+    setStepsTransation((e) => e + 1);
+  }
   function renderSteps() {
     switch (stepsTransation) {
       case 0:
@@ -21,7 +24,7 @@ const Transfert = () => {
       case 1:
         return <SendPage contact={contact} />;
       case 2:
-        return <View></View>;
+        return <></>;
       default:
         return <View></View>;
     }

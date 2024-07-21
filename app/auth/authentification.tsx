@@ -1,49 +1,78 @@
 import React, { useEffect, useState } from "react";
 import {
-  Text,
-  Button,
-  StyleSheet,
+  Text, StyleSheet,
   ActivityIndicator,
   View,
-  TouchableOpacity,
+  TouchableOpacity
 } from "react-native";
 import * as LocalAuthentication from "expo-local-authentication";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { AuthButton, UsersInterface } from "@/constants/Interfaces";
+import { AuthButton } from "@/constants/Interfaces";
 import { Ionicons } from "@expo/vector-icons";
 import Toast from "@/components/Tost";
 import { AppColors } from "@/constants/Colors";
-import { getUser } from "@/constants/HelperFunction";
+import { getCode } from "@/constants/HelperFunction";
+import SuccesModal from "@/components/SuccesModal";
+import { router } from "expo-router";
 
 interface Props {
-  onSuccess: () => void;
+  onSuccess: () => Promise<void>;
   promptMessage?: string;
+  sucessLoading: boolean;
+  modalChildren?: JSX.Element;
 }
 
-const Authentification = ({ onSuccess, promptMessage }: Props) => {
+const Authentification = ({
+  onSuccess,
+  promptMessage,
+  modalChildren,
+}: Props) => {
   const [isBiometricSupported, setIsBiometricSupported] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [writtedCode, setWrittedCode] = useState<string>("");
-  const [user, setUser] = useState<UsersInterface | null>(null);
+  const [code, setCode] = useState<string | null>(null);
+  const [openSuccesModal, setOpenSuccesModal] = useState<boolean>(false);
 
-  async function getUs() {
-    const user = await getUser();
-    setUser(user);
+  async function getCd() {
+    const cd = await getCode();
+    setCode(cd);
+    console.log("Code from getCode:", cd); // Debugging log
   }
 
   useEffect(() => {
-    getUs();
     (async () => {
       const compatible = await LocalAuthentication.hasHardwareAsync();
       setIsBiometricSupported(compatible);
+      console.log("isBiometricSupported:", compatible);
+      if (compatible) {
+        handleAuthentication(compatible);
+      }
     })();
+    getCd();
   }, []);
 
+  useEffect(() => {
+    if (writtedCode.length === 4) {
+      AuthWithCode();
+    }
+  }, [writtedCode]);
+
+  function pressNumber(number: number) {
+    if (writtedCode.length < 4) {
+      const updatedCode = writtedCode + number;
+      setWrittedCode(updatedCode);
+    }
+  }
+
   async function AuthWithCode() {
-    if (writtedCode === user?.code) {
+    console.log("Writted Code:", writtedCode); // Debugging log
+    console.log("Actual Code:", code); // Debugging log
+    if (writtedCode === code?.toString()) {
       setIsAuthenticated(true);
-      onSuccess();
+      onSuccess().then(() => {
+        setOpenSuccesModal(true);
+      });
     } else {
       setIsAuthenticated(false);
       Toast("Code invalide");
@@ -51,22 +80,10 @@ const Authentification = ({ onSuccess, promptMessage }: Props) => {
     setWrittedCode("");
   }
 
-  function pressNumber(number: number) {
-    let code = "";
-    if (writtedCode.length < 5) {
-      code = writtedCode + number;
-      setWrittedCode(code);
-    }
-    if (code.length === 4) {
-      AuthWithCode();
-    }
-    console.log("writtedCode", writtedCode.length);
-  }
-
-  const handleAuthentication = async () => {
+  const handleAuthentication = async (compatible?: boolean) => {
     setIsAuthenticating(true);
     try {
-      if (!isBiometricSupported) {
+      if (!compatible) {
         Toast("Biometrics not supported");
         return;
       }
@@ -74,7 +91,9 @@ const Authentification = ({ onSuccess, promptMessage }: Props) => {
         promptMessage: promptMessage || "Authentifiez vous pour continuer",
       });
       if (result.success) {
-        onSuccess();
+        onSuccess().then(() => {
+          setOpenSuccesModal(true);
+        });
       }
       setIsAuthenticated(result.success);
     } catch (error) {
@@ -173,60 +192,50 @@ const Authentification = ({ onSuccess, promptMessage }: Props) => {
         <Ionicons name="finger-print" size={30} color="black" />
       ),
       onPress: () => {
-        handleAuthentication();
+        handleAuthentication(isBiometricSupported);
       },
     },
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>
-        {isBiometricSupported
-          ? "Your device is compatible with Biometric Authentication"
-          : "Biometric Authentication is not supported on this device"}
-      </Text>
-      {isAuthenticating ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <>
-          <Button
-            title="Authenticate with Fingerprint"
-            onPress={handleAuthentication}
-            disabled={!isBiometricSupported}
-          />
-          {isAuthenticated && (
-            <Text style={styles.success}>Authenticated!</Text>
-          )}
-        </>
-      )}
+    <>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.roundIndicatorContainer}>
+          {roundIndicators.map((indicator, index) => (
+            <View
+              key={index}
+              style={{
+                ...styles.indicatorItem,
+                backgroundColor:
+                  index < writtedCode.length ? AppColors.primary : "#90e0ef",
+              }}
+            >
+              {indicator.title}
+            </View>
+          ))}
+        </View>
 
-      <View style={styles.roundIndicatorContainer}>
-        {roundIndicators.map((indicator, index) => (
-          <View
-            key={index}
-            style={{
-              ...styles.indicatorItem,
-              backgroundColor:
-                index < writtedCode.length ? AppColors.primary : "#90e0ef",
-            }}
-          >
-            {indicator.title}
-          </View>
-        ))}
-      </View>
-
-      <View style={styles.clavierContainer}>
-        {AuthButtonsListes.map((button, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.clavierItemsContainer}
-            onPress={button.onPress}
-          >
-            {button.title}
-          </TouchableOpacity>
-        ))}
-      </View>
-    </SafeAreaView>
+        <View style={styles.clavierContainer}>
+          {AuthButtonsListes.map((button, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.clavierItemsContainer}
+              onPress={button.onPress}
+            >
+              {button.title}
+            </TouchableOpacity>
+          ))}
+        </View>
+      </SafeAreaView>
+      <SuccesModal
+        modalVisible={openSuccesModal}
+        setModalVisible={setOpenSuccesModal}
+        callback={() => {
+          router.push("/home");
+        }}
+        children={<>{modalChildren}</>}
+      />
+    </>
   );
 };
 
@@ -234,7 +243,6 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#00b4d8",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -272,7 +280,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexWrap: "wrap",
     width: "100%",
-    backgroundColor: "white",
     position: "absolute",
     top: "auto",
     bottom: 20,

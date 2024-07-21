@@ -10,10 +10,10 @@ export default function RootLayout() {
         name="transfert"
         options={{ headerTitle: "Envoyez de l'argent" }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="authentification"
         options={{ headerTitle: "Authentification", headerShown: false }}
-      />
+      /> */}
     </Stack>
   );
 }

@@ -29,6 +29,7 @@ const Login = () => {
       const res = await RqAxios.post(Endpoint.user.login, loginData);
       if (res.status === 200) {
         setKey("user", JSON.stringify(res.data.resultat.user));
+        setKey("code", res.data.resultat.code);
         setKey("token", res.data.resultat.token);
         router.push("/home");
         Toast("Bienvenue 😊!");
