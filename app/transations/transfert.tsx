@@ -1,8 +1,8 @@
 import { useState } from "react";
-import SelectContact from "./SelectContact";
 import { View } from "react-native";
-import SendPage from "./SendPage";
 import * as Contacts from "expo-contacts";
+import SelectContact from "./SelectContact";
+import SendPage from "./SendPage";
 
 const Transfert = () => {
   const [stepsTransation, setStepsTransation] = useState(0);

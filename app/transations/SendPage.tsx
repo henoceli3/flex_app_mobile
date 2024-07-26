@@ -15,8 +15,8 @@ import { UsersInterface } from "@/constants/Interfaces";
 import { RqAxios } from "@/Services/Axios";
 import { Endpoint } from "@/Services/Endpoint";
 import Toast from "@/components/Tost";
-import Authentification from "./auth/authentification";
 import { AntDesign } from "@expo/vector-icons";
+import Authentification from "../auth/authentification";
 
 interface SendPageProps {
   contact: Contacts.Contact;

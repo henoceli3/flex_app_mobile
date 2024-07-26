@@ -70,17 +70,20 @@ const HomePage = () => {
       label: "Transfert",
       icon: null,
       onPress: () => {
-        router.push("/transfert");
+        router.push("/transations/transfert");
       },
     },
     {
       label: "Depot",
       icon: null,
       onPress: () => {
-        router.push("/authentification");
+        router.push("/auth/authentification");
       },
     },
   ];
+
+
+
   return (
     <>
       <SafeAreaView style={{ flex: 1, backgroundColor: AppColors.primary }}>
