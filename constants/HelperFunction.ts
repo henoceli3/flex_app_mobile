@@ -96,3 +96,11 @@ export const renderSigneTransation = (
     return "+";
   }
 };
+
+export const renderEtatTransaction = (etat: number) => {
+  if (etat != 2) {
+    return "Echoué";
+  } else {
+    return "Reussie";
+  }
+};

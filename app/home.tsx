@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { AppColors } from "@/constants/Colors";
 import { TransactionInterface, UsersInterface } from "@/constants/Interfaces";
 import {
@@ -81,8 +81,6 @@ const HomePage = () => {
       },
     },
   ];
-
-
 
   return (
     <>
@@ -173,52 +171,63 @@ const HomePage = () => {
           refreshing={refreshing}
           onRefresh={() => getTransactionsByUser(user?.id)}
           renderItem={({ item }) => (
-            <View
-              key={item.id}
-              style={{
-                height: 50,
-                width: "100%",
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 10,
-              }}
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  pathname: `/transations/${item.id}`,
+                  params: {
+                    transation: JSON.stringify(item),
+                  },
+                })
+              }
             >
-              <View>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    color: AppColors.primary,
-                    fontWeight: "bold",
-                  }}
-                >
-                  {rendTypeTransaction(
+              <View
+                key={item.id}
+                style={{
+                  height: 50,
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: 10,
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: AppColors.primary,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {rendTypeTransaction(
+                      item.type_transaction_id,
+                      user,
+                      item.beneficiaire,
+                      item.expediteur
+                    )}
+                  </Text>
+                  <Text style={{ fontSize: 12, color: "gray" }}>
+                    {moment(item.created_at).format("DD MMM, HH:mm")}
+                  </Text>
+                </View>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: "bold",
+                      color: AppColors.primary,
+                    }}
+                  >{`${renderSigneTransation(
                     item.type_transaction_id,
                     user,
                     item.beneficiaire,
                     item.expediteur
-                  )}
-                </Text>
-                <Text style={{ fontSize: 12, color: "gray" }}>
-                  {moment(item.created_at).format("DD MMM, HH:mm")}
-                </Text>
+                  )}${item.montant}FCFA`}</Text>
+                </View>
               </View>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    fontWeight: "bold",
-                    color: AppColors.primary,
-                  }}
-                >{`${renderSigneTransation(
-                  item.type_transaction_id,
-                  user,
-                  item.beneficiaire,
-                  item.expediteur
-                )}${item.montant}F`}</Text>
-              </View>
-            </View>
+            </TouchableOpacity>
           )}
           style={{
             padding: 20,
