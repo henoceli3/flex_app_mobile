@@ -80,6 +80,13 @@ const HomePage = () => {
         router.push("/auth/authentification");
       },
     },
+    {
+      label: "Qr code",
+      icon: null,
+      onPress: () => {
+        router.push("/qrcode/qrcode");
+      },
+    },
   ];
 
   return (
@@ -87,15 +94,12 @@ const HomePage = () => {
       <SafeAreaView style={{ flex: 1, backgroundColor: AppColors.primary }}>
         <View
           style={{
-            flex: 1,
+            height: "30%",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             backgroundColor: AppColors.primary,
-            paddingLeft: 20,
-            paddingRight: 20,
-            paddingTop: 20,
-            paddingBottom: 20,
+            padding: 20,
           }}
         >
           <View
@@ -167,6 +171,13 @@ const HomePage = () => {
           </View>
         </View>
         <FlatList
+          style={{
+            padding: 20,
+            backgroundColor: "#fff",
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            height: "70%",
+          }}
           data={transations}
           refreshing={refreshing}
           onRefresh={() => getTransactionsByUser(user?.id)}
@@ -229,13 +240,6 @@ const HomePage = () => {
               </View>
             </TouchableOpacity>
           )}
-          style={{
-            padding: 20,
-            backgroundColor: "#fff",
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            maxHeight: 550,
-          }}
         />
       </SafeAreaView>
     </>
