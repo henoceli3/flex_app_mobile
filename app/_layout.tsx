@@ -24,7 +24,7 @@ export default function RootLayout() {
       <Stack.Screen
         name="qrcode/qrcode"
         options={{
-          headerShown: false,
+          headerShown: true,
         }}
       />
     </Stack>
