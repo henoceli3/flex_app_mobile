@@ -99,7 +99,12 @@ const Login = () => {
           }}
         >
           <Link href={""}>Mot de passe oublie ?</Link>
-          <Link href={""}>Creer un compte?</Link>
+          <Link
+            href={"users/signUp"}
+            style={{ color: AppColors.primary, fontWeight: "bold" }}
+          >
+            Creer un compte?
+          </Link>
         </View>
       </View>
     </SafeAreaView>

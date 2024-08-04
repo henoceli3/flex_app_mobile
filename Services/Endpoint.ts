@@ -1,7 +1,8 @@
 export const Endpoint = {
-  baseUrl: "http://192.168.17.1:4000/",
+  baseUrl: "http://192.168.1.79:4000/",
   user: {
     login: "authentification/login",
+    signup: "users/create",
     getUserById: "users/by-id",
     getUserByNumber: "users/by-number",
   },
