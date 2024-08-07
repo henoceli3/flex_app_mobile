@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { AppColors } from "@/constants/Colors";
-import { TransactionInterface, UsersInterface } from "@/constants/Interfaces";
 import {
   getTransaction,
   getUser,
@@ -9,14 +6,17 @@ import {
   rendTypeTransaction,
   setKey,
 } from "@/constants/HelperFunction";
+import { TransactionInterface, UsersInterface } from "@/constants/Interfaces";
 import { RqAxios } from "@/Services/Axios";
 import { Endpoint } from "@/Services/Endpoint";
-import { SafeAreaView } from "react-native-safe-area-context";
-import moment from "moment";
-import { router } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
+import { router } from "expo-router";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const HomePage = () => {
+const AgentHome = () => {
   const [user, setUser] = useState<UsersInterface | null>(null);
   const [transations, setTransactions] = useState([] as TransactionInterface[]);
   const [hideSolde, setHideSolde] = useState(false);
@@ -67,24 +67,17 @@ const HomePage = () => {
 
   const headerButton = [
     {
-      label: "Transfert",
-      icon: null,
-      onPress: () => {
-        router.push("/transations/transfert");
-      },
-    },
-    {
       label: "Depot",
       icon: null,
       onPress: () => {
-        router.push("/auth/authentification");
+        router.push("/profiles/agents/transactions/depot");
       },
     },
     {
-      label: "Qr code",
+      label: "Retrait",
       icon: null,
       onPress: () => {
-        router.push("/qrcode/qrcode");
+        router.push("/profiles/agents/transactions/retrait");
       },
     },
   ];
@@ -246,4 +239,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default AgentHome;

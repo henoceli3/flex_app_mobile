@@ -15,30 +15,54 @@ export default function RootLayout() {
         }}
       >
         <Stack>
+          {/* point d'entrée */}
           <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="home" options={{ headerShown: false }} />
-          <Stack.Screen name="users/login" options={{ headerShown: false }} />
-          <Stack.Screen name="users/signUp" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="transations/transfert"
-            options={{ headerTitle: "Envoyez de l'argent" }}
-          />
+
+          {/* authentification */}
           <Stack.Screen
             name="auth/authentification"
             options={{ headerShown: false }}
           />
+
+          {/* profil standard */}
           <Stack.Screen
-            name="transations/[transaction]"
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="qrcode/qrcode"
+            name="profiles/standard/qrcode/qrcode"
             options={{
               headerShown: true,
             }}
           />
+          <Stack.Screen
+            name="profiles/standard/standard-home"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="profiles/standard/transations/transfert"
+            options={{ headerTitle: "Envoyez de l'argent" }}
+          />
+          <Stack.Screen
+            name="profiles/standard/transations/[transaction]"
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          {/* profiles agents  */}
+          <Stack.Screen
+            name="profiles/agents/agent-home"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="profiles/agents/transactions/depot"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="profiles/agents/transactions/retrait"
+            options={{ headerShown: false }}
+          />
+
+          {/* gestion des utilisateurs */}
+          <Stack.Screen name="users/login" options={{ headerShown: false }} />
+          <Stack.Screen name="users/sign-up" options={{ headerShown: false }} />
         </Stack>
       </PaperProvider>
     </>

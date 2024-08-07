@@ -1,6 +1,5 @@
 import Toast from "@/components/Tost";
 import { CommonStyle } from "@/constants/CommonStyle";
-import { setKey } from "@/constants/HelperFunction";
 import { RqAxios } from "@/Services/Axios";
 import { Endpoint } from "@/Services/Endpoint";
 import { Picker } from "@react-native-picker/picker";
@@ -11,7 +10,6 @@ import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUp = () => {
-  const [selectedValue, setSelectedValue] = useState("java");
   const [signUpLoad, setSignUpLoad] = useState(false);
   const [signUpData, setSignUpData] = useState({
     user: {
@@ -20,7 +18,7 @@ const SignUp = () => {
       telephone: "",
       email: "",
       code: "",
-      solde: 0,
+      solde: 95000,
       role_id: "",
       password: "",
     },
@@ -32,8 +30,8 @@ const SignUp = () => {
       const res = await RqAxios.post(Endpoint.user.signup, signUpData);
       if (res.status === 200) {
         // setKey("user", JSON.stringify(res.data.resultat.user));
-        router.push("/home");
-        Toast("Bienvenue 😀");
+        router.push("/profiles/standard/standard-home");
+        Toast("Connectez-vous à votre compte 🙂");
       } else {
         Toast(res.data.resultat.message);
       }
@@ -148,9 +146,9 @@ const SignUp = () => {
                 })
               }
             >
-              <Picker.Item label="Admin" value="2" />
+              {/* <Picker.Item label="Admin" value="1" /> */}
               <Picker.Item label="Client Standard" value="2" />
-              <Picker.Item label="Partenaire" value="3" />
+              {/* <Picker.Item label="Partenaire" value="3" /> */}
               <Picker.Item label="Agent" value="4" />
             </Picker>
           </View>

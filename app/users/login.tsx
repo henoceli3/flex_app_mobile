@@ -8,17 +8,19 @@ import { Link, router } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Button,
   Keyboard,
   Text,
   TextInput,
   View,
 } from "react-native";
+import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 interface loginData {
   email: string;
   password: string;
 }
+
 const Login = () => {
   const [loginLoad, setLoginLoad] = useState(false);
   const [loginData, setLoginData] = useState<loginData>({} as loginData);
@@ -31,7 +33,7 @@ const Login = () => {
         setKey("user", JSON.stringify(res.data.resultat.user));
         setKey("code", res.data.resultat.code);
         setKey("token", res.data.resultat.token);
-        router.push("/home");
+        router.push("/");
         Toast("Bienvenue 😊!");
       } else {
         Toast(res.data.resultat.message);
@@ -75,19 +77,18 @@ const Login = () => {
           }}
           secureTextEntry={true}
         />
-        {loginLoad ? (
-          <ActivityIndicator color={AppColors.primary} />
-        ) : (
-          <Button
-            title="Connexion"
-            color={AppColors.primary}
-            onPress={() => {
-              Keyboard.dismiss();
-              Login();
-            }}
-            disabled={!loginData.email || !loginData.password}
-          />
-        )}
+        <Button
+          mode="contained"
+          onPress={() => {
+            Keyboard.dismiss();
+            Login();
+          }}
+          loading={loginLoad}
+          textColor="white"
+          disabled={!loginData.email || !loginData.password}
+        >
+          Connexion
+        </Button>
         <View
           style={{
             display: "flex",
@@ -100,7 +101,7 @@ const Login = () => {
         >
           <Link href={""}>Mot de passe oublie ?</Link>
           <Link
-            href={"users/signUp"}
+            href={"users/sign-up"}
             style={{ color: AppColors.primary, fontWeight: "bold" }}
           >
             Creer un compte?
