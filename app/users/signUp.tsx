@@ -1,9 +1,9 @@
 import Toast from "@/components/Tost";
-import { AppColors } from "@/constants/Colors";
 import { CommonStyle } from "@/constants/CommonStyle";
 import { setKey } from "@/constants/HelperFunction";
 import { RqAxios } from "@/Services/Axios";
 import { Endpoint } from "@/Services/Endpoint";
+import { Picker } from "@react-native-picker/picker";
 import { router } from "expo-router";
 import { useState } from "react";
 import { Text, TextInput, View } from "react-native";
@@ -11,6 +11,7 @@ import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUp = () => {
+  const [selectedValue, setSelectedValue] = useState("java");
   const [signUpLoad, setSignUpLoad] = useState(false);
   const [signUpData, setSignUpData] = useState({
     user: {
@@ -30,9 +31,7 @@ const SignUp = () => {
       setSignUpLoad(true);
       const res = await RqAxios.post(Endpoint.user.signup, signUpData);
       if (res.status === 200) {
-        setKey("user", JSON.stringify(res.data.resultat.user));
-        setKey("code", res.data.resultat.code);
-        setKey("token", res.data.resultat.token);
+        // setKey("user", JSON.stringify(res.data.resultat.user));
         router.push("/home");
         Toast("Bienvenue 😀");
       } else {
@@ -40,7 +39,10 @@ const SignUp = () => {
       }
       setSignUpLoad(false);
     } catch (error) {
+      Toast("Une erreur est survenue 😒");
       console.log(error);
+    } finally {
+      setSignUpLoad(false);
     }
   }
 
@@ -131,13 +133,34 @@ const SignUp = () => {
             }}
             secureTextEntry={true}
           />
+          <View style={{ marginBottom: 20 }}>
+            <Text style={{ marginBottom: 20 }}>Choisissez un profile</Text>
+            <Picker
+              selectedValue={signUpData.user.role_id}
+              style={{ width: "100%" }}
+              onValueChange={(itemValue, itemIndex) =>
+                setSignUpData({
+                  ...signUpData,
+                  user: {
+                    ...signUpData.user,
+                    role_id: itemValue,
+                  },
+                })
+              }
+            >
+              <Picker.Item label="Admin" value="2" />
+              <Picker.Item label="Client Standard" value="2" />
+              <Picker.Item label="Partenaire" value="3" />
+              <Picker.Item label="Agent" value="4" />
+            </Picker>
+          </View>
           <Button
             mode="contained"
-            onPress={() => console.log("Pressed")}
+            onPress={() => signUp()}
             loading={signUpLoad}
             textColor="white"
           >
-            Press me
+            S'inscrire
           </Button>
         </View>
       </SafeAreaView>
