@@ -3,7 +3,6 @@ import {
   getTransaction,
   getUser,
   renderSigneTransation,
-  rendTypeTransaction,
   setKey,
 } from "@/constants/HelperFunction";
 import { TransactionInterface, UsersInterface } from "@/constants/Interfaces";
@@ -205,12 +204,7 @@ const AgentHome = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    {rendTypeTransaction(
-                      item.type_transaction_id,
-                      user,
-                      item.beneficiaire,
-                      item.expediteur
-                    )}
+                    {item.libelle}
                   </Text>
                   <Text style={{ fontSize: 12, color: "gray" }}>
                     {moment(item.created_at).format("DD MMM, HH:mm")}

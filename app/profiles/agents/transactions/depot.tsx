@@ -17,7 +17,7 @@ const DepotAgent = () => {
   const [expediteur, setExpediteur] = useState<UsersInterface | null>();
   const [postData, setPostData] = useState({
     montant: "",
-    type_transaction_id: 3,
+    type_transaction_id: 1,
     beneficiaire_id: beneficiaire?.id,
     expediteur_id: expediteur?.id,
     etat_transaction: 0,
@@ -119,13 +119,18 @@ const DepotAgent = () => {
               postData.montant === "" || postData.beneficiaire_id === undefined
             }
           >
-            S'inscrire
+            Deposer
           </Button>
         </View>
       </SafeAreaView>
     </>
   );
 };
+
+
+
+export default DepotAgent;
+
 
 const style = StyleSheet.create({
   container: {
@@ -146,5 +151,3 @@ const style = StyleSheet.create({
     marginBottom: 12,
   },
 });
-
-export default DepotAgent;

@@ -25,6 +25,7 @@ export interface UsersInterface {
 export interface TransactionInterface {
   id: number;
   uuid: string;
+  libelle: string;
   numero_transaction: string;
   montant: number;
   type_transaction_id: number;
