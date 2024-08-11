@@ -53,7 +53,7 @@ export default function RootLayout() {
           />
           <Stack.Screen
             name="profiles/agents/transactions/depot"
-            options={{ headerShown: false }}
+            options={{ headerTitle: "Deposer de l'argent" }}
           />
           <Stack.Screen
             name="profiles/agents/transactions/retrait"
