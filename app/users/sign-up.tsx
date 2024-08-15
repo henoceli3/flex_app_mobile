@@ -21,6 +21,7 @@ const SignUp = () => {
       solde: 95000,
       role_id: "",
       password: "",
+      cni: "",
     },
   });
 
@@ -112,6 +113,20 @@ const SignUp = () => {
                 user: {
                   ...signUpData.user,
                   email: e.nativeEvent.text,
+                },
+              });
+            }}
+          />
+          <TextInput
+            style={CommonStyle.input}
+            placeholder="Numéro CNI"
+            value={signUpData.user.cni}
+            onChange={(e) => {
+              setSignUpData({
+                ...signUpData,
+                user: {
+                  ...signUpData.user,
+                  cni: e.nativeEvent.text,
                 },
               });
             }}

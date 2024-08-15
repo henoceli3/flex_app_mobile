@@ -1,5 +1,7 @@
 import * as SecureStore from "expo-secure-store";
 import { TransactionInterface, UsersInterface } from "./Interfaces";
+import { router } from "expo-router";
+import Toast from "@/components/Tost";
 
 export async function getUser(): Promise<UsersInterface | null> {
   const user = await SecureStore.getItemAsync("user");
@@ -15,6 +17,19 @@ export async function getCode(): Promise<string | null> {
   if (code) {
     const parsedCode = JSON.parse(code);
     return parsedCode;
+  }
+  return null;
+}
+
+export async function setHomePath(path: string) {
+  await SecureStore.setItemAsync("homePath", path);
+}
+
+export async function getHomePath(): Promise<string | null> {
+  const path = await SecureStore.getItemAsync("homePath");
+  if (path) {
+    const parsedPath = JSON.parse(path);
+    return parsedPath;
   }
   return null;
 }
@@ -51,8 +66,19 @@ export async function getTransaction(): Promise<TransactionInterface[] | []> {
 }
 
 export async function Logout() {
-  await SecureStore.deleteItemAsync("user");
-  await SecureStore.deleteItemAsync("token");
+  try {
+    await SecureStore.deleteItemAsync("user");
+    await SecureStore.deleteItemAsync("token");
+    await SecureStore.deleteItemAsync("code");
+    await SecureStore.deleteItemAsync("solde");
+    await SecureStore.deleteItemAsync("transactions");
+    await SecureStore.deleteItemAsync("homePath");
+
+    router.navigate("users/login");
+    Toast("Vous avez bien été deconnecté 🙂");
+  } catch (error) {
+    Toast("Une erreur est survenue lors de la deconnexion");
+  }
 }
 
 export async function setKey(key: string, value: string) {

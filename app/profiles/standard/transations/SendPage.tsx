@@ -27,7 +27,7 @@ const SendPage = ({ contact }: SendPageProps) => {
   const [beneficiaire, setBeneficiaire] = useState<UsersInterface | null>(null);
   const [transactionData, setTransactionData] = useState({
     montant: 0,
-    montantAvecFrais: 0, //1%
+    montantAvecFrais: 0, // 1%
     type_transaction_id: 3,
     beneficiaire_id: "",
     expediteur_id: "",
@@ -56,7 +56,7 @@ const SendPage = ({ contact }: SendPageProps) => {
     } catch (error) {
       setLoadGetBenef(false);
       console.log(error);
-      Toast("User not found");
+      Toast("Ce numéro n'existe pas");
     }
   }
 
@@ -83,6 +83,34 @@ const SendPage = ({ contact }: SendPageProps) => {
       console.log(error);
     }
   }
+
+  const handleMontantChange = (text: string) => {
+    let montantO = 0;
+    let montantF = 0;
+    if (text && !isNaN(Number(text))) {
+      montantO = Number(text);
+      montantF = montantO - montantO * 0.01;
+    }
+    setTransactionData({
+      ...transactionData,
+      montant: montantO,
+      montantAvecFrais: montantF,
+    });
+  };
+
+  const handleMontantAvecFraisChange = (text: string) => {
+    let montantO = 0;
+    let montantF = 0;
+    if (text && !isNaN(Number(text))) {
+      montantF = Number(text);
+      montantO = montantF + montantF * 0.01;
+    }
+    setTransactionData({
+      ...transactionData,
+      montant: montantO,
+      montantAvecFrais: montantF,
+    });
+  };
 
   return (
     <SafeAreaView style={style.container}>
@@ -139,63 +167,27 @@ const SendPage = ({ contact }: SendPageProps) => {
             style={{ ...style.input, fontWeight: "bold" }}
             onChangeText={(text) => {}}
             value={contact?.phoneNumbers && contact.phoneNumbers[0]?.number}
-            readOnly
+            editable={false}
           />
           <TextInput
             style={{ ...style.input, fontWeight: "bold" }}
             placeholder="Montant envoyé"
-            onChangeText={(text) => {
-              let montantO = 0;
-              let montantF = 0;
-              if (text == "" || undefined || NaN) {
-                montantO = 0;
-                montantF = 0;
-              } else if (Number(text) <= 0) {
-                montantO = 0;
-                montantF = 0;
-              } else {
-                montantO = text != "" ? Number(text) : 0;
-                montantF = text != "" ? Number(text) - Number(text) * 0.01 : 0;
-              }
-              setTransactionData({
-                ...transactionData,
-                montant: montantO,
-                montantAvecFrais: montantF,
-              });
-            }}
+            onChangeText={handleMontantChange}
             value={
-              transactionData.montant === 0 || undefined || NaN
-                ? undefined
-                : transactionData.montant.toLocaleString()
+              transactionData.montant === 0
+                ? ""
+                : transactionData.montant.toString()
             }
             keyboardType="numeric"
           />
           <TextInput
             style={{ ...style.input, fontWeight: "bold" }}
             placeholder="Montant reçu"
-            onChangeText={(text) => {
-              let montantO = 0;
-              let montantF = 0;
-              if (text == "" || undefined || NaN) {
-                montantO = 0;
-                montantF = 0;
-              } else if (Number(text) <= 0) {
-                montantO = 0;
-                montantF = 0;
-              } else {
-                montantO = text != "" ? Number(text) + Number(text) * 0.01 : 0;
-                montantF = text != "" ? Number(text) : 0;
-              }
-              setTransactionData({
-                ...transactionData,
-                montant: montantO,
-                montantAvecFrais: montantF,
-              });
-            }}
+            onChangeText={handleMontantAvecFraisChange}
             value={
-              transactionData.montantAvecFrais === 0 || undefined || NaN
-                ? undefined
-                : transactionData.montantAvecFrais.toLocaleString()
+              transactionData.montantAvecFrais === 0
+                ? ""
+                : transactionData.montantAvecFrais.toString()
             }
             keyboardType="numeric"
           />

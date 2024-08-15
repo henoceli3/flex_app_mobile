@@ -57,7 +57,7 @@ export default function RootLayout() {
           />
           <Stack.Screen
             name="profiles/agents/transactions/retrait"
-            options={{ headerShown: false }}
+            options={{ headerTitle: "Retirer de l'argent" }}
           />
           <Stack.Screen
             name="profiles/agents/transactions/[transaction]"
@@ -67,6 +67,10 @@ export default function RootLayout() {
           {/* gestion des utilisateurs */}
           <Stack.Screen name="users/login" options={{ headerShown: false }} />
           <Stack.Screen name="users/sign-up" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="users/details/details"
+            options={{ headerShown: true, headerTitle: "Vos informations" }}
+          />
         </Stack>
       </PaperProvider>
     </>
