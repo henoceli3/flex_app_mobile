@@ -59,6 +59,10 @@ export default function RootLayout() {
             name="profiles/agents/transactions/retrait"
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="profiles/agents/transactions/[transaction]"
+            options={{ headerShown: false }}
+          />
 
           {/* gestion des utilisateurs */}
           <Stack.Screen name="users/login" options={{ headerShown: false }} />

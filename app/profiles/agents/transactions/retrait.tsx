@@ -17,7 +17,7 @@ const RetraitAgent = () => {
   const [expediteur, setExpediteur] = useState<UsersInterface | null>();
   const [postData, setPostData] = useState({
     montant: "",
-    type_transaction_id: 1,
+    type_transaction_id: 2,
     beneficiaire_id: beneficiaire?.id,
     expediteur_id: expediteur?.id,
     etat_transaction: 0,
@@ -81,9 +81,9 @@ const RetraitAgent = () => {
             {loadGetBenef ? (
               <ActivityIndicator size="small" color={AppColors.primary} />
             ) : (
-              beneficiaire && (
+              expediteur && (
                 <Text style={style.contactName}>
-                  A {beneficiaire?.nom} {beneficiaire?.prenoms}
+                  A {expediteur?.nom} {expediteur?.prenoms}
                 </Text>
               )
             )}
@@ -93,11 +93,10 @@ const RetraitAgent = () => {
             keyboardType="numeric"
             placeholder="Numéro à qui rétirer"
             onChangeText={(value) => {
-              console.log(parseInt(value));
               if (value.length === 10) {
                 getExpediteurByPhoneNumber(value);
               } else {
-                setBeneficiaire(undefined);
+                setExpediteur(undefined);
               }
             }}
           />

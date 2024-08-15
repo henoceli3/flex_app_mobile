@@ -70,7 +70,7 @@ const HomePage = () => {
       label: "Transfert",
       icon: null,
       onPress: () => {
-        router.push("/transations/transfert");
+        router.push("profiles/standard/transations/transfert");
       },
     },
     {
@@ -185,7 +185,7 @@ const HomePage = () => {
             <TouchableOpacity
               onPress={() =>
                 router.push({
-                  pathname: `/transations/${item.id}`,
+                  pathname: `/profiles/standard/transations/${item.id}`,
                   params: {
                     transation: JSON.stringify(item),
                   },
