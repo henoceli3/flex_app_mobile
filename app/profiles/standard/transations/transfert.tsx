@@ -9,9 +9,7 @@ const Transfert = () => {
   const [contact, setContact] = useState<Contacts.Contact>(
     {} as Contacts.Contact
   );
-  function nexStep() {
-    setStepsTransation((e) => e + 1);
-  }
+
   function renderSteps() {
     switch (stepsTransation) {
       case 0:
@@ -29,6 +27,7 @@ const Transfert = () => {
         return <View></View>;
     }
   }
+
   return <View>{renderSteps()}</View>;
 };
 

@@ -19,7 +19,7 @@ const SignUp = () => {
       email: "",
       code: "",
       solde: 95000,
-      role_id: "",
+      role_id: 1,
       password: "",
       cni: "",
     },
@@ -31,12 +31,11 @@ const SignUp = () => {
       const res = await RqAxios.post(Endpoint.user.signup, signUpData);
       if (res.status === 200) {
         // setKey("user", JSON.stringify(res.data.resultat.user));
-        router.push("/profiles/standard/standard-home");
+        router.push("/");
         Toast("Connectez-vous à votre compte 🙂");
       } else {
         Toast(res.data.resultat.message);
       }
-      setSignUpLoad(false);
     } catch (error) {
       Toast("Une erreur est survenue 😒");
       console.log(error);
@@ -162,9 +161,9 @@ const SignUp = () => {
               }
             >
               {/* <Picker.Item label="Admin" value="1" /> */}
-              <Picker.Item label="Client Standard" value="2" />
+              <Picker.Item label="Client Standard" value={1} />
               {/* <Picker.Item label="Partenaire" value="3" /> */}
-              <Picker.Item label="Agent" value="4" />
+              <Picker.Item label="Agent" value={2} />
             </Picker>
           </View>
           <Button

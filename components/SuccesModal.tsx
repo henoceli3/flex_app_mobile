@@ -1,6 +1,5 @@
-import { AntDesign } from "@expo/vector-icons";
 import { useEffect } from "react";
-import { Alert, Modal, Pressable, Text, View } from "react-native";
+import { Alert, Modal } from "react-native";
 
 interface Props {
   modalVisible: boolean;
@@ -19,15 +18,13 @@ const SuccesModal = ({
     let timer: NodeJS.Timeout;
 
     if (modalVisible) {
-      // Fermer le modal après 5 secondes si il est visible
       timer = setTimeout(() => {
         setModalVisible(false);
         callback();
-      }, 5000);
+      }, 2000);
     }
 
     return () => {
-      // Clear timeout if the component unmounts or modalVisible changes
       if (timer) clearTimeout(timer);
     };
   }, [modalVisible]);

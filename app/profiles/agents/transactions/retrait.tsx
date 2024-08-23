@@ -56,13 +56,15 @@ const RetraitAgent = () => {
           transaction: postData,
         }
       );
-      setPostLoading(false);
-      Toast("Depot reussi");
-      router.push("/profiles/agents/agent-home");
+
+      Toast(res.data.message);
+      router.push("/");
     } catch (error) {
       setPostLoading(false);
       console.log(error);
       Toast("Une erreur est survenue");
+    } finally {
+      setPostLoading(false);
     }
   }
 

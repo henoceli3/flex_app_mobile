@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import {
-  Text, StyleSheet,
-  ActivityIndicator,
-  View,
-  TouchableOpacity
-} from "react-native";
-import * as LocalAuthentication from "expo-local-authentication";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { AuthButton } from "@/constants/Interfaces";
-import { Ionicons } from "@expo/vector-icons";
+import SuccesModal from "@/components/SuccesModal";
 import Toast from "@/components/Tost";
 import { AppColors } from "@/constants/Colors";
 import { getCode } from "@/constants/HelperFunction";
-import SuccesModal from "@/components/SuccesModal";
+import { AuthButton } from "@/constants/Interfaces";
+import { Ionicons } from "@expo/vector-icons";
+import * as LocalAuthentication from "expo-local-authentication";
 import { router } from "expo-router";
+import React, { useEffect, useState } from "react"; 
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface Props {
   onSuccess: () => Promise<void>;
@@ -37,7 +38,7 @@ const Authentification = ({
   async function getCd() {
     const cd = await getCode();
     setCode(cd);
-    console.log("Code from getCode:", cd); // Debugging log
+    console.log("Code from getCode:", cd);
   }
 
   useEffect(() => {
@@ -90,12 +91,12 @@ const Authentification = ({
       const result = await LocalAuthentication.authenticateAsync({
         promptMessage: promptMessage || "Authentifiez vous pour continuer",
       });
+      setIsAuthenticated(result.success);
       if (result.success) {
         onSuccess().then(() => {
           setOpenSuccesModal(true);
         });
       }
-      setIsAuthenticated(result.success);
     } catch (error) {
       console.error("Authentication failed:", error);
     } finally {
@@ -231,7 +232,7 @@ const Authentification = ({
         modalVisible={openSuccesModal}
         setModalVisible={setOpenSuccesModal}
         callback={() => {
-          router.push("/home");
+          router.push("/");
         }}
         children={<>{modalChildren}</>}
       />

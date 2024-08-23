@@ -1,6 +1,5 @@
 import {
   ActivityIndicator,
-  Button,
   StyleSheet,
   Text,
   TextInput,
@@ -17,6 +16,7 @@ import { Endpoint } from "@/Services/Endpoint";
 import Toast from "@/components/Tost";
 import { AntDesign } from "@expo/vector-icons";
 import Authentification from "../../../auth/authentification";
+import { Button } from "react-native-paper";
 
 interface SendPageProps {
   contact: Contacts.Contact;
@@ -206,15 +206,18 @@ const SendPage = ({ contact }: SendPageProps) => {
               <ActivityIndicator size="small" color={AppColors.primary} />
             ) : (
               <Button
-                title="Envoyer"
+                mode="contained"
                 onPress={() => setShowAuth(true)}
+                loading={loadSend}
+                textColor="white"
                 disabled={
                   transactionData.montant === 0 ||
                   transactionData.montantAvecFrais === 0 ||
                   beneficiaire === null
                 }
-                color={AppColors.primary}
-              />
+              >
+                Envoyer
+              </Button>
             )}
           </View>
         </>
